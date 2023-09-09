@@ -1,16 +1,7 @@
 # Install and load the "ez" package if not already installed
-if (!requireNamespace("ez", quietly = TRUE)) {
-  install.packages("ez")
-}
 library(ez)
-
-if (!requireNamespace("ggpubr", quietly = TRUE)) {
-  install.packages("ggpubr")
-}
 library(ggpubr)
-if (!requireNamespace("rstatix", quietly = TRUE)) {
-  install.packages("rstatix")
-}
+
 library(rstatix)
 
 # Load necessary libraries
@@ -55,3 +46,4 @@ for (i in colnames(combined_data)) {
 #Boxplot Graphs from combined dataset
 bxp <- ggboxplot(combined_data, x = "Time", y = "Average.Step.Count", add = "value")
 print(bxp)
+

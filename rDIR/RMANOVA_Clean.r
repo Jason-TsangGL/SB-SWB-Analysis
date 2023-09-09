@@ -19,16 +19,11 @@ data_time3$Time <- "Time3"
 combined_data <- bind_rows(data_time1, data_time2, data_time3)
 
 # Descriptive statistics
-print(summary(combined_data)
-)
+print(summary(combined_data))
+
 # Iterate between Factors to calculate Repeated Measures ANOVA results
-for (i in colnames(combined_data)) {
-
-    # Repeated Measures ANOVA on combined dataset
-    model <- aov(combined_data[[i]]~factor(Time)+Error(factor(Identifier)), data = combined_data)
-
-    # Print ANOVA results for each dependent variable
-    cat("ANOVA results for", i, ":\n")
-    print(model)
-    cat("\n")
+for (i in colnames(combined_data)) {# Print ANOVA results for each dependent variable # nolint
+  cat("ANOVA results for", i, ":\n")
+  print(summary(aov(combined_data[[i]]~factor(Time)+Error(factor(Identifier)), data = combined_data))) # Repeated Measures ANOVA on combined dataset # nolint
+  cat("\n")
 }
