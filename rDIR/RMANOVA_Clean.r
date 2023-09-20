@@ -7,7 +7,7 @@ library(car)
 
 # Import your datasets (replace with actual file paths)
 data_time1 <- read.csv("Baseline.csv")
-data_time2 <- read.csv("PostInvervention.csv")
+data_time2 <- read.csv("PostIntervention.csv")
 data_time3 <- read.csv("FollowUp.csv")
 
 # Add a Time factor to each dataset

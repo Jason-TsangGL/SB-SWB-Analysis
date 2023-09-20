@@ -1,17 +1,16 @@
-# Install and load the "ez" package if not already installed
-library(ez)
-library(ggpubr)
-
-library(rstatix)
-
 # Load necessary libraries
-library(dplyr)
-library(tidyr)
-library(car)
+required_packages <- c("dplyr", "tidyr", "car", "ez", "ggpubr", "rstatix", "readxl", "DescTools")
+
+for (package in required_packages) {
+  if (!require(package, character.only = TRUE)) {
+    install.packages(package)
+  }
+  library(package, character.only = TRUE)
+}
 
 # Import your datasets (replace with actual file paths)
 data_time1 <- read.csv("Baseline.csv")
-data_time2 <- read.csv("PostInvervention.csv")
+data_time2 <- read.csv("PostIntervention.csv")
 data_time3 <- read.csv("FollowUp.csv")
 
 # Add a Time factor to each dataset
@@ -22,20 +21,26 @@ data_time3$Time <- "Time3"
 # Combine the datasets into a single data frame
 combined_data <- bind_rows(data_time1, data_time2, data_time3)
 
-# Check the structure and contents of your combined dataset
-# str(combined_data)
-# head(combined_data)
-# names(combined_data)
-# col(combined_data)
-# Descriptive statisticsy
-# print(summary(combined_data)
-# )
-# Initialize an empty list to store ANOVA results
-anova_results_list <- list()
-for (i in colnames(combined_data)) {
+# Function to winsorize all numeric columns except "X" and "Identifier" and log the original and winsorized values
+winsorize_data <- function(data) {
+  numeric_cols <- sapply(data, is.numeric)
+  numeric_cols_to_winsorize <- colnames(data)[numeric_cols & colnames(data) != "X" & colnames(data) != "Identifier"]
+  original_data <- data  # Create a copy of the original data
+  data[numeric_cols_to_winsorize] <- lapply(data[numeric_cols_to_winsorize],function(x)
+  {winsorized_values <- DescTools::Winsorize(x)
+  return(winsorized_values)})
+  return(list(Original = original_data, Winsorized = data))
+}
 
-    # # Repeated Measures ANOVA on combined dataset
-    model <- aov(combined_data[[i]]~factor(Time)+Error(factor(Identifier)), data = combined_data)
+# Winsorize numeric variables in the combined dataset, excluding "X" and "Identifier" columns
+winsorized_data_list <- winsorize_data(combined_data)
+combined_data_winsorized <- winsorized_data_list$Winsorized
+
+
+for (i in colnames(combined_data_winsorized)) {
+
+    # Repeated Measures ANOVA on winsorized combined dataset
+    model <- aov(combined_data_winsorized[[i]] ~ factor(Time) + Error(factor(Identifier)), data = combined_data_winsorized)
 
     # Print ANOVA results for each dependent variable
     cat("ANOVA results for", i, ":\n")
@@ -43,7 +48,6 @@ for (i in colnames(combined_data)) {
     cat("\n")
 }
 
-#Boxplot Graphs from combined dataset
-bxp <- ggboxplot(combined_data, x = "Time", y = "Average.Step.Count", add = "value")
-print(bxp)
-
+# You can also save the original and winsorized data to CSV files if needed
+write.csv(original_data, "original_data.csv", row.names = FALSE)
+write.csv(combined_data_winsorized, "winsorized_data.csv", row.names = FALSE)
