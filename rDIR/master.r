@@ -37,17 +37,17 @@ winsorized_data_list <- winsorize_data(combined_data)
 combined_data_winsorized <- winsorized_data_list$Winsorized
 
 
-for (i in colnames(combined_data_winsorized)) {
+# for (i in colnames(combined_data_winsorized)) {
 
-    # Repeated Measures ANOVA on winsorized combined dataset
-    model <- aov(combined_data_winsorized[[i]] ~ factor(Time) + Error(factor(Identifier)), data = combined_data_winsorized)
+#     # Repeated Measures ANOVA on winsorized combined dataset
+#     model <- aov(combined_data_winsorized[[i]] ~ factor(Time) + Error(factor(Identifier)), data = combined_data_winsorized)
 
-    # Print ANOVA results for each dependent variable
-    cat("ANOVA results for", i, ":\n")
-    print(model)
-    cat("\n")
-}
+#     # Print ANOVA results for each dependent variable
+#     cat("ANOVA results for", i, ":\n")
+#     print(model)
+#     cat("\n")
+# }
 
 # You can also save the original and winsorized data to CSV files if needed
-write.csv(original_data, "original_data.csv", row.names = FALSE)
+write.csv(winsorized_data_list$Original, "original_data.csv", row.names = FALSE)
 write.csv(combined_data_winsorized, "winsorized_data.csv", row.names = FALSE)
