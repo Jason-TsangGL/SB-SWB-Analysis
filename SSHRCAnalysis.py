@@ -612,13 +612,13 @@ class SSHRCAnalysis:
         totalpimeal = [f"Total Post-Int {Meal} Time"]
         totalfumeal = [f"Total Follow-Up {Meal} Time"]
         for S in range (1,len(SSHRC_NP[:,bl])):
-            totalblmeal += [[convert_1HR(SSHRC_NP[S,bl]),convert_1HR(SSHRC_NP[S,(bl+9)])]]
+            totalblmeal += [convert_1HR(SSHRC_NP[S,bl]),convert_1HR(SSHRC_NP[S,(bl+9)])]
         for S in range (1,len(SSHRC_NP[:,pi])):
 
-            totalpimeal += [[convert_1HR(SSHRC_NP[S,pi]),convert_1HR(SSHRC_NP[S,(pi+9)])]]
+            totalpimeal += [convert_1HR(SSHRC_NP[S,pi]),convert_1HR(SSHRC_NP[S,(pi+9)])]
         for S in range (1,len(SSHRC_NP[:,fu])):
 
-            totalfumeal += [[convert_1HR(SSHRC_NP[S,fu]),convert_1HR(SSHRC_NP[S,(fu+9)])]]
+            totalfumeal += [convert_1HR(SSHRC_NP[S,fu]),convert_1HR(SSHRC_NP[S,(fu+9)])]
         returndata += [totalblmeal]
         returndata += [totalpimeal]
         returndata += [totalfumeal]
